@@ -1,0 +1,98 @@
+<resources>
+    <string name="app_name">MELOMEET</string>
+
+
+    <string name="lorem">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l\'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n\'a pas fait que survivre cinq siècles, mais s\'est aussi adapté à la bureautique informatique, sans que son contenu n\'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.</string>
+    <string name="lorem_low">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard</string>
+    <!-- Firebase Strings-->
+    <string name="collection_users">Users</string>
+    <string name="storage_profile_image">profile_images</string>
+    <string name="storage_thumbs_image">thumbs_image</string>
+
+    <!-- Login Activity -->
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="login_register">Register</string>
+    <string name="login_sign_in">Sign In</string>
+    <string name="desc_google_icon">Sign In</string>
+
+    <!-- Register Activity -->
+    <string name="register_title">Create a New Account</string>
+    <string name="register_username">Username </string>
+    <string name="register_email">Email </string>
+    <string name="register_name">Name </string>
+    <string name="register_firstname">Firstname </string>
+    <string name="register_password">Password </string>
+    <string name="register_confirm_password">Confirm password </string>
+    <string name="register_birthdate">Birth date </string>
+    <string name="register_btn">CREATE ACCOUNT</string>
+
+    <!-- Menu -->
+    <string name="menu_sign_out">Sign Out</string>
+
+    <!-- Menu bottom navigation -->
+    <string name="bottom_navigation_home">Home</string>
+    <string name="bottom_navigation_profile">Profile</string>
+    <string name="bottom_navigation_new_post"></string>
+    <string name="bottom_navigation_map">Map</string>
+    <string name="bottom_navigation_match">Match</string>
+    <string name="bottom_navigation_message">Messages</string>
+
+    <!-- Errors strings -->
+    <string name="error_email">Please, specify a valid email.</string>
+    <string name="error_username">Please, specify a username.</string>
+    <string name="error_name">Please, specify a name.</string>
+    <string name="error_firstname">Please, specify a firstname.</string>
+    <string name="error_password">Please, specify a password.</string>
+    <string name="error_password_confirm">Please, confirm your password.</string>
+    <string name="error_password_do_not_match">Please, password do not match.</string>
+    <string name="error_password_length">Please, password should be at least 6 characters.</string>
+    <string name="error_birth_date">Please, enter your birth date.</string>
+
+    <!-- Progress dialog strings -->
+
+    <string name="progress_dialog_loading">Loading ...</string>
+    <string name="progress_dialog_register_user">Registering User</string>
+    <string name="progress_dialog_register_user_message">Please wait while we create your account</string>
+
+
+    <string name="progress_dialog_login_user">Login User</string>
+    <string name="progress_dialog_login_user_message">Please wait while we check your credentials</string>
+
+
+    <string name="progress_dialog_profile_user">User Infos</string>
+    <string name="progress_dialog_profile_message">Please wait while we get your infos</string>
+
+    <string name="progress_dialog_update_profile_user">Updating Infos</string>
+    <string name="progress_dialog_update_profile_message">Please wait while we update your infos</string>
+
+    <string name="progress_dialog_upload_profile_image">Uploading image ...</string>
+    <string name="progress_dialog_upload_profile_image_message">Please wait while we upload and process the image.</string>
+
+    <!-- Profile strings -->
+    <string name="profile_edit">Edit your profile</string>
+    <string name="profile_recent_pictures">Recent pictures: </string>
+
+    <!-- Edit Profile strings -->
+    <string name="edit_profile_personnal_information">Personnal information</string>
+    <string name="edit_profile_music_information">About music</string>
+    <string name="edit_profile_name">Name</string>
+    <string name="edit_profile_firstname">Firstname</string>
+    <string name="edit_profile_description">Description</string>
+    <string name="edit_profile_status">Status</string>
+    <string name="edit_profile_fav_artist">Favourite artist</string>
+    <string name="edit_profile_fav_single">Favourite single</string>
+
+
+    <!-- Fragment names -->
+    <string name="view_profile_fragment">ViewProfile</string>
+    <string name="view_message_fragment">ViewMessage</string>
+
+    <!-- Fragment View Message -->
+    <string name="view_message_title">Chat</string>
+    <string name="view_message_search">Search ...</string>
+
+    <!-- Fragment Chat -->
+    <string name="fragment_chat_hint">Aaaa</string>
+
+</resources>

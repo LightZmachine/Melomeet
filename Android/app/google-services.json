@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "48876315086",
+    "firebase_url": "https://melomeet-c8104.firebaseio.com",
+    "project_id": "melomeet-c8104",
+    "storage_bucket": "melomeet-c8104.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48876315086:android:5d8589e1d690c368",
+        "android_client_info": {
+          "package_name": "com.td.yassine.zekri.melomeet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48876315086-cis9k47am4dcgk0ev2sjfq91k86ir7tc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-D7Ce2d8B6jRa2TVxa6LKZd6n6aMvDd4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
