@@ -94,12 +94,15 @@ public class EditProfileFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         Log.d(TAG, "onCreateView: started.");
-//        setHasOptionsMenu(true);
+//      setHasOptionsMenu(true);
 
         ButterKnife.bind(this, view);
 
         mContext = getActivity();
-        mUser = User.getInstance();
+        Bundle args = getArguments();
+        if (args != null) {
+            mUser = args.getParcelable(getString(R.string.bundle_object_user));
+        }
 
         mProgressDialog = new ProgressDialog(mContext);
         mScrollView.setFocusableInTouchMode(true);

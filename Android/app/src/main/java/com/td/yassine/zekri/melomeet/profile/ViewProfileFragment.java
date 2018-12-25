@@ -137,7 +137,7 @@ public class ViewProfileFragment extends Fragment {
         setHasOptionsMenu(true);
 
         mContext = getActivity();
-        mUser = User.getInstance();
+        mUser = new User();
 
         ButterKnife.bind(this, view);
 
@@ -280,6 +280,9 @@ public class ViewProfileFragment extends Fragment {
         Log.d(TAG, "tvEditProfileClick: clicked");
         Fragment fragment = new EditProfileFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Bundle args = new Bundle();
+        args.putParcelable(getString(R.string.bundle_object_user), mUser);
+        fragment.setArguments(args);
         ft.replace(R.id.container, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.addToBackStack("HEY");

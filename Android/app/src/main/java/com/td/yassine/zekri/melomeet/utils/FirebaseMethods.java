@@ -41,7 +41,7 @@ public class FirebaseMethods {
         this.mContext = context;
         this.mAuth = auth;
         this.mDb = FirebaseFirestore.getInstance();
-        this.mUser = User.getInstance();
+        this.mUser = new User();
     }
 
     public void signInUserWithMail(final String email, final String password, final ProgressDialog progressDialog, final View view) {

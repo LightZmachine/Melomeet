@@ -95,4 +95,7 @@
     <!-- Fragment Chat -->
     <string name="fragment_chat_hint">Aaaa</string>
 
+
+    <!-- Bundles -->
+    <string name="bundle_object_user">UserObject</string>
 </resources>

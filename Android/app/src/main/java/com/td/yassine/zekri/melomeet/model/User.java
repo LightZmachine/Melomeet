@@ -1,10 +1,10 @@
 package com.td.yassine.zekri.melomeet.model;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    /*
-        Singleton Support
-     */
+public class User implements Parcelable {
+
     private static User instance;
     private String email;
     private String username;
@@ -22,7 +22,7 @@ public class User {
     private int number_followers;
     private int number_posts;
 
-    private User(String email, String username, String birth_date, String id, String status, String image, String thumb_image, String name, String firstname, String description, String fav_artist, String fav_single, int number_following, int number_followers, int number_posts) {
+    public User(String email, String username, String birth_date, String id, String status, String image, String thumb_image, String name, String firstname, String description, String fav_artist, String fav_single, int number_following, int number_followers, int number_posts) {
         this.email = email;
         this.username = username;
         this.birth_date = birth_date;
@@ -40,7 +40,7 @@ public class User {
         this.number_posts = number_posts;
     }
 
-    private User() {
+    public User() {
         this.setNumber_following(0);
         this.setNumber_followers(0);
         this.setNumber_posts(0);
@@ -52,16 +52,36 @@ public class User {
         this.setThumb_image("default");
     }
 
-    public static User getInstance() {
-        if (instance == null) {
-            instance = new User();
-        }
-        return instance;
+    protected User(Parcel in) {
+        email = in.readString();
+        username = in.readString();
+        birth_date = in.readString();
+        id = in.readString();
+        status = in.readString();
+        image = in.readString();
+        thumb_image = in.readString();
+        name = in.readString();
+        firstname = in.readString();
+        description = in.readString();
+        fav_artist = in.readString();
+        fav_single = in.readString();
+        number_following = in.readInt();
+        number_followers = in.readInt();
+        number_posts = in.readInt();
     }
 
-    /*
-        Normal Object code
-     */
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     public String getEmail() {
         return email;
     }
@@ -201,6 +221,30 @@ public class User {
                 ", number_followers=" + number_followers +
                 ", number_posts=" + number_posts +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(email);
+        parcel.writeString(username);
+        parcel.writeString(birth_date);
+        parcel.writeString(id);
+        parcel.writeString(status);
+        parcel.writeString(image);
+        parcel.writeString(thumb_image);
+        parcel.writeString(name);
+        parcel.writeString(firstname);
+        parcel.writeString(description);
+        parcel.writeString(fav_artist);
+        parcel.writeString(fav_single);
+        parcel.writeInt(number_following);
+        parcel.writeInt(number_followers);
+        parcel.writeInt(number_posts);
     }
 }
 
