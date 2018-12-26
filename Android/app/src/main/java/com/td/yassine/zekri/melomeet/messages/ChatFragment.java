@@ -35,7 +35,6 @@ public class ChatFragment extends Fragment {
     //variables
     private Context mContext;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

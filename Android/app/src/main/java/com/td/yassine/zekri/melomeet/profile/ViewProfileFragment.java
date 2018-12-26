@@ -117,6 +117,7 @@ public class ViewProfileFragment extends Fragment {
     private Context mContext;
     private ProgressDialog mProgressDialog;
     private User mUser;
+    private Bundle mBundle;
 
     //firebase
     private FirebaseAuth mAuth;
@@ -136,11 +137,14 @@ public class ViewProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view_profile, container, false);
         setHasOptionsMenu(true);
 
-        mContext = getActivity();
-        mUser = new User();
-
         ButterKnife.bind(this, view);
 
+        mContext = getActivity();
+        mBundle = getArguments();
+        if (mBundle != null) {
+            mUser = mBundle.getParcelable(getString(R.string.bundle_object_user));
+            setupBottomNavigationView();
+        }
         mProgressDialog = new ProgressDialog(mContext);
 
         Log.d(TAG, "onCreateView: started.");
@@ -148,7 +152,6 @@ public class ViewProfileFragment extends Fragment {
         mScrollView.setFocusableInTouchMode(true);
         mScrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 
-        setupBottomNavigationView();
         setupToolbar();
         setupFirebaseAuth();
         initRecyclerViewGallery();
@@ -302,7 +305,7 @@ public class ViewProfileFragment extends Fragment {
      */
     private void setupBottomNavigationView() {
         BottomNavigationViewHelper.setupBottomNavigationView(mBottomNavigationView);
-        BottomNavigationViewHelper.enableNavigation(mContext, getActivity(), mBottomNavigationView);
+        BottomNavigationViewHelper.enableNavigation(mContext, getActivity(), mBottomNavigationView, mUser);
         Menu menu = mBottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);

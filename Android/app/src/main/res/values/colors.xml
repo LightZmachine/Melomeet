@@ -10,6 +10,7 @@
     <color name="purple_light">#b3b3ff</color>
     <color name="purple">#8080ff</color>
     <color name="grey">#808080</color>
+    <color name="grey_light">#e1eaea</color>
     <color name="link_blue">#007acc</color>
     <color name="green">#00cc00</color>
 </resources>

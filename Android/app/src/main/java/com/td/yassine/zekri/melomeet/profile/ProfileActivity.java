@@ -27,6 +27,7 @@ import com.td.yassine.zekri.melomeet.authentification.LoginActivity;
 import com.td.yassine.zekri.melomeet.map.MapActivity;
 import com.td.yassine.zekri.melomeet.match.MatchActivity;
 import com.td.yassine.zekri.melomeet.messages.MessagesActivity;
+import com.td.yassine.zekri.melomeet.model.User;
 import com.td.yassine.zekri.melomeet.utils.BottomNavigationViewHelper;
 import com.td.yassine.zekri.melomeet.utils.UniversalImageLoader;
 
@@ -40,6 +41,8 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
 
     //Variables
+    private User mUser;
+    private Bundle mBundle;
     //Firebase
 //    private GoogleApiClient mGoogleApiClient;
 
@@ -49,12 +52,15 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         ButterKnife.bind(this);
-
+        mBundle = getIntent().getExtras();
         init();
     }
 
     private void init() {
         ViewProfileFragment fragment = new ViewProfileFragment();
+        if (mBundle != null) {
+            fragment.setArguments(mBundle);
+        }
         FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(getString(R.string.view_profile_fragment));

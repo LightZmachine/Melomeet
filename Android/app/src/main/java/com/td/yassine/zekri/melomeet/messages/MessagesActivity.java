@@ -27,6 +27,7 @@ import com.td.yassine.zekri.melomeet.R;
 import com.td.yassine.zekri.melomeet.authentification.LoginActivity;
 import com.td.yassine.zekri.melomeet.map.MapActivity;
 import com.td.yassine.zekri.melomeet.match.MatchActivity;
+import com.td.yassine.zekri.melomeet.model.User;
 import com.td.yassine.zekri.melomeet.profile.ProfileActivity;
 import com.td.yassine.zekri.melomeet.profile.ViewProfileFragment;
 import com.td.yassine.zekri.melomeet.utils.BottomNavigationViewHelper;
@@ -39,17 +40,26 @@ public class MessagesActivity extends AppCompatActivity {
     //Constants
     private static final String TAG = "MessagesActivity";
 
+    // Variables
+    private User mUser;
+    private Bundle mBundle;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
-
         ButterKnife.bind(this);
-        init();
+
+        mBundle = getIntent().getExtras();
+        if (mBundle != null) {
+            init();
+        }
+
     }
 
     private void init() {
         ViewMessageFragment fragment = new ViewMessageFragment();
+        fragment.setArguments(mBundle);
         FragmentTransaction transaction = MessagesActivity.this.getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(getString(R.string.view_message_fragment));

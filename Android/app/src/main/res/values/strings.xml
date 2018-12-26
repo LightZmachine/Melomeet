@@ -84,6 +84,10 @@
     <string name="edit_profile_fav_single">Favourite single</string>
 
 
+    <!-- Add a post strings -->
+    <string name="add_post_title">Add a Title</string>
+    <string name="add_post_content">Write Something about this Post</string>
+
     <!-- Fragment names -->
     <string name="view_profile_fragment">ViewProfile</string>
     <string name="view_message_fragment">ViewMessage</string>

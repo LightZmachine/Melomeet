@@ -16,6 +16,7 @@ import com.td.yassine.zekri.melomeet.R;
 import com.td.yassine.zekri.melomeet.map.MapActivity;
 import com.td.yassine.zekri.melomeet.match.MatchActivity;
 import com.td.yassine.zekri.melomeet.messages.MessagesActivity;
+import com.td.yassine.zekri.melomeet.model.User;
 import com.td.yassine.zekri.melomeet.profile.ProfileActivity;
 
 import java.lang.reflect.Field;
@@ -31,29 +32,34 @@ public class BottomNavigationViewHelper {
         bottomNavigationView.enableShiftingMode(false);
     }
 
-    public static void enableNavigation(final Context context, final Activity callingActivity, BottomNavigationViewEx view) {
+    public static void enableNavigation(final Context context, final Activity callingActivity, BottomNavigationViewEx view, final User user) {
         view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
                         Intent i0 = new Intent(context, HomeActivity.class);
+                        i0.putExtra(context.getString(R.string.bundle_object_user), user);
                         context.startActivity(i0);
                         break;
                     case R.id.nav_profil:
                         Intent i1 = new Intent(context, ProfileActivity.class);
+                        i1.putExtra(context.getString(R.string.bundle_object_user), user);
                         context.startActivity(i1);
                         break;
                     case R.id.nav_map:
                         Intent i2 = new Intent(context, MapActivity.class);
+                        i2.putExtra(context.getString(R.string.bundle_object_user), user);
                         context.startActivity(i2);
                         break;
                     case R.id.nav_match:
                         Intent i3 = new Intent(context, MatchActivity.class);
+                        i3.putExtra(context.getString(R.string.bundle_object_user), user);
                         context.startActivity(i3);
                         break;
                     case R.id.nav_messages:
                         Intent i4 = new Intent(context, MessagesActivity.class);
+                        i4.putExtra(context.getString(R.string.bundle_object_user), user);
                         context.startActivity(i4);
                         break;
                 }

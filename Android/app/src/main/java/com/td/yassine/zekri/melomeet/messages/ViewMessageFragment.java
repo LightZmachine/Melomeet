@@ -27,6 +27,7 @@ import com.td.yassine.zekri.melomeet.R;
 import com.td.yassine.zekri.melomeet.adapters.RecyclerViewGalleryProfilAdapter;
 import com.td.yassine.zekri.melomeet.adapters.RecyclerViewMessageAdapter;
 import com.td.yassine.zekri.melomeet.authentification.LoginActivity;
+import com.td.yassine.zekri.melomeet.model.User;
 import com.td.yassine.zekri.melomeet.profile.EditProfileFragment;
 import com.td.yassine.zekri.melomeet.profile.ProfileActivity;
 import com.td.yassine.zekri.melomeet.utils.BottomNavigationViewHelper;
@@ -52,6 +53,8 @@ public class ViewMessageFragment extends Fragment {
 
     //variables
     private Context mContext;
+    private User mUser;
+    private Bundle mBundle;
 
     //firebase
     private FirebaseAuth mAuth;
@@ -65,13 +68,17 @@ public class ViewMessageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view_message, container, false);
         setHasOptionsMenu(true);
 
-        ButterKnife.bind(this, view);
-
-        mContext = getActivity();
-
         Log.d(TAG, "onCreateView: started.");
 
-        setupBottomNavigationView();
+        ButterKnife.bind(this, view);
+        mContext = getActivity();
+
+        mBundle = getArguments();
+        if (mBundle != null) {
+            mUser = mBundle.getParcelable(mContext.getString(R.string.bundle_object_user));
+            setupBottomNavigationView();
+        }
+
         setupFirebaseAuth();
         initRecyclerViewMessage();
 
@@ -89,7 +96,7 @@ public class ViewMessageFragment extends Fragment {
      */
     private void setupBottomNavigationView() {
         BottomNavigationViewHelper.setupBottomNavigationView(mBottomNavigationView);
-        BottomNavigationViewHelper.enableNavigation(mContext, getActivity(), mBottomNavigationView);
+        BottomNavigationViewHelper.enableNavigation(mContext, getActivity(), mBottomNavigationView, mUser);
         Menu menu = mBottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);

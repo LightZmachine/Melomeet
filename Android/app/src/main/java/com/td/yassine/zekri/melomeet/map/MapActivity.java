@@ -25,6 +25,7 @@ import com.td.yassine.zekri.melomeet.R;
 import com.td.yassine.zekri.melomeet.authentification.LoginActivity;
 import com.td.yassine.zekri.melomeet.match.MatchActivity;
 import com.td.yassine.zekri.melomeet.messages.MessagesActivity;
+import com.td.yassine.zekri.melomeet.model.User;
 import com.td.yassine.zekri.melomeet.profile.ProfileActivity;
 import com.td.yassine.zekri.melomeet.utils.BottomNavigationViewHelper;
 
@@ -41,6 +42,8 @@ public class MapActivity extends AppCompatActivity {
     BottomNavigationViewEx mBottomNavigationView;
 
     //Variables
+    private Bundle mBundle;
+    private User mUser;
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -53,7 +56,11 @@ public class MapActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        setupBottomNavigationView();
+        mBundle = getIntent().getExtras();
+        if (mBundle != null) {
+            mUser = mBundle.getParcelable(getString(R.string.bundle_object_user));
+            setupBottomNavigationView();
+        }
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -64,7 +71,7 @@ public class MapActivity extends AppCompatActivity {
 
     private void setupBottomNavigationView() {
         BottomNavigationViewHelper.setupBottomNavigationView(mBottomNavigationView);
-        BottomNavigationViewHelper.enableNavigation(MapActivity.this, this, mBottomNavigationView);
+        BottomNavigationViewHelper.enableNavigation(MapActivity.this, this, mBottomNavigationView, mUser);
         Menu menu = mBottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
