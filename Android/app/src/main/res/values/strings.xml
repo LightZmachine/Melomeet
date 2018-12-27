@@ -102,4 +102,7 @@
 
     <!-- Bundles -->
     <string name="bundle_object_user">UserObject</string>
+
+    <!-- Buttons -->
+    <string name="button_open_camera">Open Camera</string>
 </resources>

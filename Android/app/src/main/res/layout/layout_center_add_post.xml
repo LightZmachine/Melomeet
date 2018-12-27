@@ -6,123 +6,58 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-        <ScrollView
-            android:id="@+id/scrollView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical">
+            android:layout_height="match_parent">
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/linLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@id/relLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_grey_border_bottom"
+                    android:hint="@string/add_post_title"
+                    android:inputType="textShortMessage"
+                    android:padding="15dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_grey_border_bottom"
+                    android:gravity="top"
+                    android:hint="@string/add_post_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="10"
+                    android:padding="15dp"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/linLayout"
+                android:layout_marginBottom="50dp">
+
+                <include layout="@layout/layout_center_view_pager" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:id="@+id/linLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toTopOf="@id/relLayout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                <include layout="@layout/layout_bottom_tabs_post" />
+            </RelativeLayout>
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/white_grey_border_bottom"
-                        android:hint="@string/add_post_title"
-                        android:inputType="textShortMessage"
-                        android:padding="15dp"
-                        android:textSize="14sp" />
+        </RelativeLayout>
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/white_grey_border_bottom"
-                        android:gravity="top"
-                        android:hint="@string/add_post_content"
-                        android:inputType="textMultiLine"
-                        android:minLines="10"
-                        android:padding="15dp"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/relLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/linLayout"
-                    android:background="@color/grey_light"
-                    android:gravity="top"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/linLayout">
-
-                    <RelativeLayout
-                        android:id="@id/relLayout2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <Spinner
-                            android:id="@+id/spinnerDirectory"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_margin="10dp"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginEnd="15dp"
-                            android:gravity="center_vertical"
-                            android:textColor="@color/black"
-                            android:textSize="20sp" />
-                    </RelativeLayout>
-
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/relLayout2"
-                        android:padding="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:weightSum="100">
-
-                            <ImageView
-                                android:id="@+id/galleryImageView"
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                android:layout_weight="50"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/test_pic_merveil" />
-
-                            <GridView
-                                android:id="@+id/gridView"
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                android:layout_marginTop="1dp"
-                                android:layout_weight="50"
-                                android:gravity="center"
-                                android:horizontalSpacing="1.5dp"
-                                android:numColumns="3"
-                                android:stretchMode="none"
-                                android:verticalSpacing="1.5dp" />
-
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_gravity="center" />
-                    </FrameLayout>
-
-
-                </RelativeLayout>
-
-            </android.support.constraint.ConstraintLayout>
-        </ScrollView>
     </RelativeLayout>
 </merge>
