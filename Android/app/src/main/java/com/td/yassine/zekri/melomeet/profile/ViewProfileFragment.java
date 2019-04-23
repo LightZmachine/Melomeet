@@ -8,9 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,48 +23,45 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.td.yassine.zekri.melomeet.HomeActivity;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
+import com.td.yassine.zekri.melomeet.IMainActivity;
+import com.td.yassine.zekri.melomeet.MainActivity;
 import com.td.yassine.zekri.melomeet.R;
 import com.td.yassine.zekri.melomeet.adapters.RecyclerViewGalleryProfilAdapter;
-import com.td.yassine.zekri.melomeet.authentification.LoginActivity;
-import com.td.yassine.zekri.melomeet.model.User;
-import com.td.yassine.zekri.melomeet.utils.BottomNavigationViewHelper;
+import com.td.yassine.zekri.melomeet.models.User;
+import com.td.yassine.zekri.melomeet.utils.FilePaths;
 import com.td.yassine.zekri.melomeet.utils.FirebaseMethods;
 import com.td.yassine.zekri.melomeet.utils.GridSpacingItemDecoration;
-import com.td.yassine.zekri.melomeet.utils.StringManipulation;
 import com.td.yassine.zekri.melomeet.utils.UniversalImageLoader;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,16 +72,13 @@ import id.zelory.compressor.Compressor;
 import static android.app.Activity.RESULT_OK;
 
 
-public class ViewProfileFragment extends Fragment {
+public class ViewProfileFragment extends Fragment implements OnLikeListener {
 
     //constants
     private static final String TAG = "ViewProfileFragment";
-    private static final int ACTIVITY_NUM = 1;
     private static final int GALLERY_PICK = 366;
 
     //widgets
-    @BindView(R.id.bottom_navigation)
-    BottomNavigationViewEx mBottomNavigationView;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.recycler_view)
@@ -113,52 +105,78 @@ public class ViewProfileFragment extends Fragment {
     @BindView(R.id.image_profil)
     CircleImageView mImage_profile;
 
+    private LikeButton mLikeButton;
+
     //variables
     private Context mContext;
-    private ProgressDialog mProgressDialog;
     private User mUser;
-    private Bundle mBundle;
+    private IMainActivity mInterface;
 
     //firebase
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseFirestore mDb;
-    private ListenerRegistration mProfileInfoListener;
-    private GoogleApiClient mGoogleApiClient;
+    private ListenerRegistration mListenerRegistration;
+    private FirebaseMethods mFirebaseMethods;
 
-    //firebase storage
-    private FirebaseStorage mImageStorage;
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mListenerRegistration != null) {
+            mListenerRegistration.remove();
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mListenerRegistration = db.collection(getString(R.string.collection_users)).document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                Log.d(TAG, "onEvent: User Changed.");
+                if (e != null) {
+                    Log.e(TAG, "onEvent: listenError", e);
+                    return;
+                }
+                mUser = documentSnapshot.toObject(User.class);
+                updateProfileUi(mUser);
+            }
+        });
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        Log.d(TAG, "onCreateView: started.");
         View view = inflater.inflate(R.layout.fragment_view_profile, container, false);
         setHasOptionsMenu(true);
 
         ButterKnife.bind(this, view);
 
         mContext = getActivity();
-        mBundle = getArguments();
-        if (mBundle != null) {
-            mUser = mBundle.getParcelable(getString(R.string.bundle_object_user));
-            setupBottomNavigationView();
-        }
-        mProgressDialog = new ProgressDialog(mContext);
 
-        Log.d(TAG, "onCreateView: started.");
+        mLikeButton = view.findViewById(R.id.heart_button);
+        mLikeButton.setOnLikeListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        mFirebaseMethods = new FirebaseMethods(mContext, mAuth);
 
         mScrollView.setFocusableInTouchMode(true);
         mScrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 
+        checkIfFollowing();
         setupToolbar();
-        setupFirebaseAuth();
         initRecyclerViewGallery();
-        this.mImageStorage = FirebaseStorage.getInstance();
-        this.mDb = FirebaseFirestore.getInstance();
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mInterface = (IMainActivity) getActivity();
     }
 
     @OnClick(R.id.image_profil)
@@ -186,9 +204,10 @@ public class ViewProfileFragment extends Fragment {
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
 
+                FilePaths filePaths = new FilePaths();
                 final String uID = mAuth.getCurrentUser().getUid();
-                Uri resultUri = result.getUri();
-                File thumb_file = new File(resultUri.getPath());
+                Uri imageUri = result.getUri();
+                File thumb_file = new File(imageUri.getPath());
 
                 try {
                     Bitmap thumb_bitmap = new Compressor(mContext)
@@ -200,15 +219,14 @@ public class ViewProfileFragment extends Fragment {
                     thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     final byte[] thumb_byte = baos.toByteArray();
 
+                    String uploadPath = filePaths.FIREBASE_THUMB_PROFILE_IMAGE + "/" + uID + "/thumb_profile_image.jpeg";
+                    final StorageReference filePath = FirebaseStorage.getInstance().getReference().child(uploadPath);
 
-                    final StorageReference filePath = mImageStorage.getReference().child(getString(R.string.storage_profile_image)).child(uID + ".jpg");
-                    final StorageReference thumb_filePath = mImageStorage.getReference()
-                            .child(getString(R.string.storage_profile_image))
-                            .child(getString(R.string.storage_thumbs_image))
-                            .child(uID + ".jpg");
-
-
-                    filePath.putFile(resultUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    StorageMetadata metadata = new StorageMetadata.Builder()
+                            .setContentType("image/jpeg")
+                            .setContentLanguage("fr")
+                            .build();
+                    filePath.putBytes(thumb_byte, metadata).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                             if (!task.isSuccessful()) {
@@ -218,62 +236,38 @@ public class ViewProfileFragment extends Fragment {
                         }
                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
-                        public void onComplete(@NonNull final Task<Uri> task) {
+                        public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(mContext, "Working", Toast.LENGTH_SHORT).show();
-                                final String download_url = task.getResult().toString();
+                                String downloadUrl = task.getResult().toString();
+                                HashMap<String, Object> updateProfileImage = new HashMap<>();
+                                updateProfileImage.put("thumb_profile_image", downloadUrl);
 
-                                thumb_filePath.putBytes(thumb_byte).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                                    @Override
-                                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                        if (!task.isSuccessful()) {
-                                            throw task.getException();
-                                        }
-                                        return thumb_filePath.getDownloadUrl();
-                                    }
-                                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Uri> thumb_task) {
-                                        String thumb_downloadUrl = thumb_task.getResult().toString();
-                                        if (thumb_task.isSuccessful()) {
-
-                                            HashMap<String, Object> updateMap = new HashMap<>();
-                                            updateMap.put("image", download_url);
-                                            updateMap.put("thumb_image", thumb_downloadUrl);
-
-                                            DocumentReference userRef = mDb.collection(getString(R.string.collection_users)).document(uID);
-                                            userRef.update(updateMap)
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if (task.isSuccessful()) {
-                                                                progressDialog.dismiss();
-                                                                Toast.makeText(mContext, "Success Uploading", Toast.LENGTH_SHORT).show();
-                                                            } else {
-                                                                progressDialog.dismiss();
-                                                                Toast.makeText(mContext, "Upload Failed", Toast.LENGTH_SHORT).show();
-                                                            }
-
-                                                        }
-                                                    });
-                                        } else {
-                                            Toast.makeText(mContext, "Error in uploading thumbnail", Toast.LENGTH_SHORT).show();
-                                            progressDialog.dismiss();
-                                        }
-                                    }
-                                });
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                DocumentReference userRef = db.collection(getString(R.string.collection_users)).document(uID);
+                                userRef.update(updateProfileImage)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    progressDialog.dismiss();
+                                                    Toast.makeText(mContext, "Success Uploading", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    progressDialog.dismiss();
+                                                    Toast.makeText(mContext, "Upload Failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                             } else {
-                                Toast.makeText(mContext, "Error in loading", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "Error in uploading new image profile.", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
                         }
                     });
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
+                Log.e(TAG, "onActivityResult: error: " + result.getError().toString());
             }
         }
     }
@@ -281,15 +275,7 @@ public class ViewProfileFragment extends Fragment {
     @OnClick(R.id.tv_edit_profile)
     public void tvEditProfileClick() {
         Log.d(TAG, "tvEditProfileClick: clicked");
-        Fragment fragment = new EditProfileFragment();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Bundle args = new Bundle();
-        args.putParcelable(getString(R.string.bundle_object_user), mUser);
-        fragment.setArguments(args);
-        ft.replace(R.id.container, fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack("HEY");
-        ft.commit();
+        mInterface.inflateEditProfileFragment();
     }
 
 
@@ -301,58 +287,29 @@ public class ViewProfileFragment extends Fragment {
     }
 
     /**
-     * BottomNavigation View setup
-     */
-    private void setupBottomNavigationView() {
-        BottomNavigationViewHelper.setupBottomNavigationView(mBottomNavigationView);
-        BottomNavigationViewHelper.enableNavigation(mContext, getActivity(), mBottomNavigationView, mUser);
-        Menu menu = mBottomNavigationView.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
-    }
-
-    /**
      * Setting up the toolbar
      */
     private void setupToolbar() {
-        ((ProfileActivity) getActivity()).setSupportActionBar(mToolbar);
-        ((ProfileActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
     }
 
-    /**
-     * Setup the firebase auth
-     */
-    private void setupFirebaseAuth() {
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                Log.d(TAG, "onAuthStateChanged: true.");
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    //User is signed in.
-                    Log.d(TAG, "onAuthStateChanged: signedIn");
-                } else {
-                    //User is signed out.
-                    Log.d(TAG, "onAuthStateChanged: user isn't signed in. Going to login activity.");
-
-                    Intent i = new Intent(mContext, LoginActivity.class);
-                    startActivity(i);
-                    getActivity().finish();
-                }
-            }
-        };
-    }
 
     private void updateProfileUi(User user) {
+
+        ProgressDialog progressDialog = new ProgressDialog(mContext);
+        progressDialog.setTitle(getString(R.string.progress_dialog_loading_title));
+        progressDialog.setMessage(getString(R.string.progress_dialog_loading_user_infos));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         mUser.setNumber_following(user.getNumber_following());
         mUser.setNumber_followers(user.getNumber_followers());
         mUser.setNumber_posts(user.getNumber_posts());
         mUser.setFav_artist(user.getFav_artist());
         mUser.setFav_single(user.getFav_single());
-        mUser.setImage(user.getImage());
         mUser.setUsername(user.getUsername());
+        mUser.setThumb_profile_image(user.getThumb_profile_image());
         mUser.setName(user.getName());
         mUser.setFirstname(user.getFirstname());
         mUser.setDescription(user.getDescription());
@@ -368,58 +325,19 @@ public class ViewProfileFragment extends Fragment {
         mTv_description.setText(mUser.getDescription());
 
         mToolbar.setTitle(mUser.getUsername());
-        UniversalImageLoader.setImage(mUser.getImage(), mImage_profile, null, "");
 
-        this.mProgressDialog.dismiss();
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.melomeet_logo)
+                .centerInside()
+                .override(100, 100);
+        Glide.with(mContext)
+                .setDefaultRequestOptions(options)
+                .load(mUser.getThumb_profile_image())
+                .into(mImage_profile);
+
+        progressDialog.dismiss();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-
-        this.mProgressDialog.setTitle(getString(R.string.progress_dialog_profile_user));
-        this.mProgressDialog.setMessage(getString(R.string.progress_dialog_profile_message));
-        this.mProgressDialog.setCanceledOnTouchOutside(false);
-        this.mProgressDialog.show();
-
-        final String userID = mAuth.getCurrentUser().getUid();
-
-        DocumentReference docRef = this.mDb.collection(mContext.getString(R.string.collection_users)).document(userID);
-
-        mProfileInfoListener = docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.d(TAG, "onEvent: " + e.toString());
-                    Intent i = new Intent(mContext, HomeActivity.class);
-                    startActivity(i);
-                    getActivity().finish();
-                    return;
-                }
-                updateProfileUi(documentSnapshot.toObject(User.class));
-            }
-        });
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(mContext)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-        if (mProfileInfoListener != null) {
-            mProfileInfoListener.remove();
-        }
-    }
 
     //Display the menu
     @Override
@@ -436,19 +354,95 @@ public class ViewProfileFragment extends Fragment {
                 Log.d(TAG, "onOptionsItemSelected: signOut clicked.");
                 mAuth.signOut();
 
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(@NonNull Status status) {
-                                Intent i = new Intent(mContext, LoginActivity.class);
-                                startActivity(i);
-                                getActivity().finish();
-                            }
-                        }
-                );
+//                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+//                        new ResultCallback<Status>() {
+//                            @Override
+//                            public void onResult(@NonNull Status status) {
+//                                Intent i = new Intent(mContext, LoginActivity.class);
+//                                startActivity(i);
+//                                getActivity().finish();
+//                            }
+//                        }
+//                );
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void checkIfFollowing() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userID = mAuth.getCurrentUser().getUid();
+        CollectionReference followingRef = db.collection(getString(R.string.collection_users))
+                .document(userID)
+                .collection(getString(R.string.collection_following));
+
+        followingRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        if (documentSnapshot.getString("userID").equals("nn4qxJWlSJWing1K4dqYHj3Spye2")) {
+                            Log.d(TAG, "onComplete: following founded.");
+                            mLikeButton.setLiked(true);
+                            break;
+                        } else {
+                            mLikeButton.setLiked(false);
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "onComplete: Error getting documents: " + task.getException());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void liked(LikeButton likeButton) {
+        Log.d(TAG, "liked: liked.");
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userID = mAuth.getCurrentUser().getUid();
+        CollectionReference followingRef = db.collection(getString(R.string.collection_users))
+                .document(userID)
+                .collection(getString(R.string.collection_following));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("userID", "nn4qxJWlSJWing1K4dqYHj3Spye2");
+        followingRef.add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    mFirebaseMethods.increaseFollowingUser(mUser);
+                } else {
+                    Log.d(TAG, "onComplete: error: " + task.getException());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void unLiked(LikeButton likeButton) {
+        Log.d(TAG, "unLiked: unliked.");
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userID = mAuth.getCurrentUser().getUid();
+        Query query = db.collection(getString(R.string.collection_users))
+                .document(userID)
+                .collection(getString(R.string.collection_following))
+                .whereEqualTo("userID", "nn4qxJWlSJWing1K4dqYHj3Spye2");
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                        snapshot.getReference().delete();
+                        mFirebaseMethods.decreaseFollowingUser(mUser);
+                    }
+                } else {
+                    Log.d(TAG, "onComplete: error getting the documents : " + task.getException());
+                }
+            }
+        });
     }
 }

@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,14 +18,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.td.yassine.zekri.melomeet.HomeActivity;
+import com.td.yassine.zekri.melomeet.MainActivity;
 import com.td.yassine.zekri.melomeet.R;
-import com.td.yassine.zekri.melomeet.authentification.LoginActivity;
-import com.td.yassine.zekri.melomeet.authentification.RegisterActivity;
-import com.td.yassine.zekri.melomeet.model.User;
+import com.td.yassine.zekri.melomeet.models.User;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class FirebaseMethods {
@@ -52,7 +49,7 @@ public class FirebaseMethods {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: sign In success.");
-                            Intent i = new Intent(mContext, HomeActivity.class);
+                            Intent i = new Intent(mContext, MainActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             mContext.startActivity(i);
                         } else {
@@ -81,7 +78,7 @@ public class FirebaseMethods {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            Intent i = new Intent(mContext, HomeActivity.class);
+                            Intent i = new Intent(mContext, MainActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             mContext.startActivity(i);
                         } else {
@@ -132,7 +129,7 @@ public class FirebaseMethods {
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "onSuccess: upload sucess, redirect to home Activity.");
                 Snackbar.make(view, "Register success. Thanks, welcome " + username, Snackbar.LENGTH_SHORT).show();
-                Intent i = new Intent(mContext, HomeActivity.class);
+                Intent i = new Intent(mContext, MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 mContext.startActivity(i);
                 progressDialog.dismiss();
@@ -147,4 +144,45 @@ public class FirebaseMethods {
         });
     }
 
+    public void increaseFollowingUser(User user) {
+        Log.d(TAG, "increaseFollowingUser: increasing number following.");
+        String userID = user.getId();
+        int number_following = user.getNumber_following();
+        number_following++;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection(mContext.getString(R.string.collection_users))
+                .document(userID);
+        docRef.update("number_following", number_following).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "onComplete: successfully updated.");
+                } else {
+                    Log.d(TAG, "onComplete: error: " + task.getException());
+                }
+            }
+        });
+    }
+
+    public void decreaseFollowingUser(User user) {
+        Log.d(TAG, "decreaseFollowingUser: decreasing number following.");
+        String userID = user.getId();
+        int number_following = user.getNumber_following();
+        if (number_following > 0) {
+            number_following--;
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection(mContext.getString(R.string.collection_users))
+                    .document(userID);
+            docRef.update("number_following", number_following).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "onComplete: successfully updated.");
+                    } else {
+                        Log.d(TAG, "onComplete: error: " + task.getException());
+                    }
+                }
+            });
+        }
+    }
 }

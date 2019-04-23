@@ -7,8 +7,10 @@
         android:background="@color/white">
 
         <RelativeLayout
+            android:id="@+id/relLayout1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@id/relLayout2">
 
             <LinearLayout
                 android:id="@+id/linLayout"
@@ -21,6 +23,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <EditText
+                    android:id="@+id/editText_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/white_grey_border_bottom"
@@ -30,6 +33,7 @@
                     android:textSize="14sp" />
 
                 <EditText
+                    android:id="@+id/editText_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/white_grey_border_bottom"
@@ -40,22 +44,64 @@
                     android:padding="15dp"
                     android:textSize="14sp" />
             </LinearLayout>
+        </RelativeLayout>
 
-            <RelativeLayout
+        <RelativeLayout
+            android:id="@+id/relLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/relLayout3"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/linLayout"
-                android:layout_marginBottom="50dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <include layout="@layout/layout_center_view_pager" />
-            </RelativeLayout>
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
 
-            <RelativeLayout
+        <RelativeLayout
+            android:id="@+id/relLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/white_grey_border_top"
+            android:gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:paddingLeft="15dp">
+
+            <LinearLayout
+                android:id="@+id/linLayoutAddAttachments"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <include layout="@layout/layout_bottom_tabs_post" />
-            </RelativeLayout>
+                <ImageView
+                    android:id="@+id/iv_camera"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_camera" />
+
+                <ImageView
+                    android:id="@+id/iv_gallery"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_gallery" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_delete_img"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_trash"
+                android:visibility="gone" />
+
 
         </RelativeLayout>
 

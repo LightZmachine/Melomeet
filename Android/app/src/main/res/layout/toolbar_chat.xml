@@ -29,12 +29,13 @@
                 android:src="@drawable/ic_back_arrow" />
 
             <TextView
+                android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@id/iv_backArrow"
                 android:layout_toRightOf="@id/iv_backArrow"
-                android:text="Merveil Nicador Dilon"
+                android:text=""
                 android:textSize="18sp" />
 
             <ImageView

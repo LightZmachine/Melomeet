@@ -20,6 +20,6 @@
 
     <!-- Floating button -->
     <style name="CustomFloatingButton" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorAccent">@color/link_blue</item>
+        <item name="colorAccent">@color/red2</item>
     </style>
 </resources>

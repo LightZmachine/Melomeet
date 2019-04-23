@@ -1,11 +1,33 @@
 <resources>
     <string name="app_name">MELOMEET</string>
 
+    <!-- Fragments Tags -->
+    <string name="tag_fragment_agreement">Agreement</string>
+    <string name="tag_fragment_home">Home</string>
+    <string name="tag_fragment_view_profile">View Profile</string>
+    <string name="tag_fragment_edit_profile">Edit Profile</string>
+    <string name="tag_fragment_map">Map</string>
+    <string name="tag_fragment_match">Match</string>
+    <string name="tag_fragment_view_messages">View Messages</string>
+    <string name="tag_fragment_add_post">Add Post</string>
+    <string name="tag_fragment_full_screen_image">Full Screen Image</string>
+    <string name="tag_fragment_chat">Chat</string>
+
+
+    <!-- Dialogs Tags -->
+    <string name="tag_dialog_new_chat">New Chat Dialog</string>
+
 
     <string name="lorem">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l\'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n\'a pas fait que survivre cinq siècles, mais s\'est aussi adapté à la bureautique informatique, sans que son contenu n\'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.</string>
     <string name="lorem_low">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard</string>
+
     <!-- Firebase Strings-->
     <string name="collection_users">Users</string>
+    <string name="collection_following">following</string>
+    <string name="collection_posts">Posts</string>
+    <string name="collection_discussions">Discussions</string>
+    <string name="collection_messages">Messages</string>
+    <string name="collection_attachments">Attachments</string>
     <string name="storage_profile_image">profile_images</string>
     <string name="storage_thumbs_image">thumbs_image</string>
 
@@ -30,6 +52,11 @@
     <!-- Menu -->
     <string name="menu_sign_out">Sign Out</string>
 
+    <!-- Menu Navigation drawer -->
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="agreement">Agreement</string>
+
     <!-- Menu bottom navigation -->
     <string name="bottom_navigation_home">Home</string>
     <string name="bottom_navigation_profile">Profile</string>
@@ -50,8 +77,8 @@
     <string name="error_birth_date">Please, enter your birth date.</string>
 
     <!-- Progress dialog strings -->
-
-    <string name="progress_dialog_loading">Loading ...</string>
+    <string name="progress_dialog_loading_title">Loading</string>
+    <string name="progress_dialog_loading_user_infos">Please wait while we retrieve your infos ...</string>
     <string name="progress_dialog_register_user">Registering User</string>
     <string name="progress_dialog_register_user_message">Please wait while we create your account</string>
 
@@ -68,6 +95,9 @@
 
     <string name="progress_dialog_upload_profile_image">Uploading image ...</string>
     <string name="progress_dialog_upload_profile_image_message">Please wait while we upload and process the image.</string>
+
+    <string name="progress_dialog_creating_a_new_post">Loading</string>
+    <string name="progress_dialog_creating_a_new_post_message">Please wait while we create your new post.</string>
 
     <!-- Profile strings -->
     <string name="profile_edit">Edit your profile</string>
@@ -93,16 +123,23 @@
     <string name="view_message_fragment">ViewMessage</string>
 
     <!-- Fragment View Message -->
-    <string name="view_message_title">Chat</string>
+    <string name="view_message_title">MeloChat</string>
+    <string name="home_feed_title">MeloNews</string>
     <string name="view_message_search">Search ...</string>
 
     <!-- Fragment Chat -->
-    <string name="fragment_chat_hint">Aaaa</string>
+    <string name="fragment_chat_hint">Type here..</string>
 
 
     <!-- Bundles -->
     <string name="bundle_object_user">UserObject</string>
+    <string name="bundle_receiver_id">ReceiverID</string>
+    <string name="bundle_discussion_id">DiscussionID</string>
+    <string name="bundle_username">Username</string>
 
     <!-- Buttons -->
     <string name="button_open_camera">Open Camera</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

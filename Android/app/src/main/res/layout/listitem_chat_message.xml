@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image_profil"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_margin="15dp"
+        android:src="@drawable/melomeet_logo"
+        app:civ_border_color="@color/black"
+        app:civ_border_width="1dp" />
+
+    <LinearLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/image_profil"
+        android:layout_toRightOf="@id/image_profil"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="80"
+            android:text="I like turtles"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="20"
+            android:gravity="center|center_vertical"
+            android:paddingRight="8dp"
+            android:text="15:57"
+            android:textColor="@color/black" />
+    </LinearLayout>
+</RelativeLayout>

@@ -21,7 +21,9 @@
             android:layout_height="45dp"
             android:layout_centerVertical="true"
             android:layout_margin="15dp"
-            android:src="@drawable/test_pic_merveil" />
+            android:src="@drawable/melomeet_logo"
+            app:civ_border_color="@color/black"
+            app:civ_border_width="1dp" />
 
         <TextView
             android:id="@+id/tv_date"
@@ -32,7 +34,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:text="15:57" />
+            android:text="00:00" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,7 +48,7 @@
                 android:id="@+id/nom_profil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Merveil Nicador DILON"
+                android:text=""
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 

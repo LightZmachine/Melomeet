@@ -31,7 +31,8 @@
                         android:layout_marginEnd="35dp"
                         android:layout_marginRight="35dp"
                         android:layout_toLeftOf="@id/image_profil"
-                        android:src="@drawable/ic_send_message" />
+                        android:src="@drawable/ic_send_message"
+                        android:tint="@color/red2" />
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/image_profil"
@@ -39,18 +40,27 @@
                         android:layout_height="148dp"
                         android:layout_centerHorizontal="true"
                         android:elevation="7dp"
-                        android:src="@drawable/test_pic_merveil"
+                        android:src="@drawable/melomeet_logo"
                         app:civ_border_color="@color/black"
                         app:civ_border_width="2dp" />
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                    <com.like.LikeButton
+                        android:id="@+id/heart_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="35dp"
-                        android:layout_marginStart="35dp"
                         android:layout_toRightOf="@id/image_profil"
-                        android:src="@drawable/ic_add" />
+                        app:icon_size="28dp"
+                        app:icon_type="heart" />
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginStart="35dp"-->
+                    <!--android:layout_marginLeft="35dp"-->
+                    <!--android:layout_toRightOf="@id/image_profil"-->
+                    <!--android:src="@drawable/ic_add" />-->
 
                     <TextView
                         android:id="@+id/tv_edit_profile"
@@ -68,9 +78,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/relLayout1"
-                    android:layout_marginEnd="20dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
                     android:background="@drawable/white_grey_border_top"
                     android:gravity="center"
                     android:orientation="horizontal"

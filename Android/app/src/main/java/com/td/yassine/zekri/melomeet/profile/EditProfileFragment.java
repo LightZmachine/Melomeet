@@ -9,21 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
@@ -33,13 +25,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.td.yassine.zekri.melomeet.IMainActivity;
+import com.td.yassine.zekri.melomeet.MainActivity;
 import com.td.yassine.zekri.melomeet.R;
-import com.td.yassine.zekri.melomeet.adapters.RecyclerViewGalleryProfilAdapter;
 import com.td.yassine.zekri.melomeet.authentification.LoginActivity;
-import com.td.yassine.zekri.melomeet.model.User;
-import com.td.yassine.zekri.melomeet.utils.BottomNavigationViewHelper;
-import com.td.yassine.zekri.melomeet.utils.GridSpacingItemDecoration;
+import com.td.yassine.zekri.melomeet.models.User;
 import com.td.yassine.zekri.melomeet.utils.UniversalImageLoader;
 
 import java.util.HashMap;
@@ -82,6 +72,7 @@ public class EditProfileFragment extends Fragment {
     private ProgressDialog mProgressDialog;
     private Context mContext;
     private User mUser;
+    private IMainActivity mInterface;
 
     //firebase
     private FirebaseAuth mAuth;
@@ -109,7 +100,6 @@ public class EditProfileFragment extends Fragment {
         mScrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 
         setupToolbar();
-        setupFirebaseAuth();
         init();
         return view;
     }
@@ -125,13 +115,13 @@ public class EditProfileFragment extends Fragment {
         mTextInputLayout_fav_artist.getEditText().setText(mUser.getFav_artist());
         mTextInputLayout_fav_single.getEditText().setText(mUser.getFav_single());
 
-        UniversalImageLoader.setImage(mUser.getImage(), mImageProfile, null, "");
+        UniversalImageLoader.setImage(mUser.getThumb_profile_image(), mImageProfile, null, "");
     }
 
     @OnClick(R.id.iv_backArrow)
     public void backArrowClicked() {
         Log.d(TAG, "backArrowClicked: clicked.");
-        getFragmentManager().popBackStack();
+        mInterface.onBackPressed();
     }
 
     @OnClick(R.id.iv_checked)
@@ -210,77 +200,13 @@ public class EditProfileFragment extends Fragment {
      * Setting up the toolbar
      */
     private void setupToolbar() {
-        ((ProfileActivity) getActivity()).setSupportActionBar(mToolbar);
-        ((ProfileActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-    }
-
-    /**
-     * Setup the firebase auth
-     */
-    private void setupFirebaseAuth() {
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                Log.d(TAG, "onAuthStateChanged: true.");
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    //User is signed in.
-                    Log.d(TAG, "onAuthStateChanged: signedIn");
-                } else {
-                    //User is signed out.
-                    Log.d(TAG, "onAuthStateChanged: user isn't signed in. Going to login activity.");
-
-                    Intent i = new Intent(mContext, LoginActivity.class);
-                    startActivity(i);
-                    getActivity().finish();
-                }
-            }
-        };
+        ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mInterface = (IMainActivity) getActivity();
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-
-    //Display the menu
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-//        menuInflater.inflate(R.menu.menu, menu);
-//        super.onCreateOptionsMenu(menu, menuInflater);
-//    }
-//
-//    //Click item menu listener
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.item_sign_out:
-//                Log.d(TAG, "onOptionsItemSelected: signOut clicked.");
-//                mAuth.signOut();
-//
-//                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-//                        new ResultCallback<Status>() {
-//                            @Override
-//                            public void onResult(@NonNull Status status) {
-//                                Intent i = new Intent(mContext, LoginActivity.class);
-//                                startActivity(i);
-//                                finish();
-//                            }
-//                        }
-//                );
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 }

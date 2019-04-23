@@ -3,6 +3,7 @@ package com.td.yassine.zekri.melomeet.posts;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import com.td.yassine.zekri.melomeet.utils.FilePaths;
 import com.td.yassine.zekri.melomeet.utils.FileSearch;
 import com.td.yassine.zekri.melomeet.utils.GridImageAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -56,29 +58,30 @@ public class GalleryPostFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         mContext = getActivity();
-        directories = new ArrayList<>();
-
         init();
-
         return view;
     }
 
     private void init() {
         FilePaths filePaths = new FilePaths();
+        directories = new ArrayList<>();
 
         if (FileSearch.getDirectoryPaths(filePaths.PICTURES) != null) {
             directories = FileSearch.getDirectoryPaths(filePaths.PICTURES);
         }
-        ArrayList<String> directoriesNames = new ArrayList<>();
+
+        directories.add(filePaths.CAMERA);
+
+        ArrayList<String> directoryNames = new ArrayList<>();
         directories.add(filePaths.CAMERA);
         for (int i = 0; i < directories.size(); i++) {
             int index = directories.get(i).lastIndexOf("/");
             String string = directories.get(i).substring(index);
-            directoriesNames.add(string);
+            directoryNames.add(string);
         }
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_dropdown_item, directoryNames);
         mSpinner.setAdapter(adapter);
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -99,25 +102,31 @@ public class GalleryPostFragment extends Fragment {
         Log.d(TAG, "setupGridView: directory chosen: " + selectedDirectory);
         final ArrayList<String> imgUrls = FileSearch.getFilePaths(selectedDirectory);
 
-        int gridWidth = getResources().getDisplayMetrics().widthPixels;
-        int imageWidth = gridWidth / NUM_GRID_COLUMNS;
-        mGridView.setColumnWidth(imageWidth);
+        if (imgUrls.size() > 0) {
+            int gridWidth = getResources().getDisplayMetrics().widthPixels;
+            int imageWidth = gridWidth / NUM_GRID_COLUMNS;
+            mGridView.setColumnWidth(imageWidth);
 
-        GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mAppend, imgUrls);
-        mGridView.setAdapter(adapter);
+            GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mAppend, imgUrls);
+            mGridView.setAdapter(adapter);
 
-        setImage(imgUrls.get(0), mGalleryImage, mAppend);
-        mSelectedImage = imgUrls.get(0);
-
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Log.d(TAG, "onItemClick: selected an image: " + imgUrls.get(position));
-
-                setImage(imgUrls.get(position), mGalleryImage, mAppend);
-                mSelectedImage = imgUrls.get(position);
+            try {
+                setImage(imgUrls.get(0), mGalleryImage, mAppend);
+                mSelectedImage = imgUrls.get(0);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Log.e(TAG, "setupGridView: ArrayIndexOutOfBoundsException: " + e.getMessage());
             }
-        });
+
+            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Log.d(TAG, "onItemClick: selected an image: " + imgUrls.get(position));
+
+                    setImage(imgUrls.get(position), mGalleryImage, mAppend);
+                    mSelectedImage = imgUrls.get(position);
+                }
+            });
+        }
     }
 
     private void setImage(String imgURL, ImageView image, String append) {

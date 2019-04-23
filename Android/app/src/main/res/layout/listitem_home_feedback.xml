@@ -2,114 +2,127 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="10dp">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:id="@+id/relLayout1"
-        android:layout_width="match_parent"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/white_grey_border_bottom"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_margin="8dp"
+        android:layout_marginBottom="15dp"
+        android:padding="20dp"
+        app:cardCornerRadius="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image_profil"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_centerVertical="true"
-            android:layout_margin="15dp"
-            android:src="@drawable/test_pic_merveil" />
-
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/image_profil"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:paddingBottom="10dp">
 
-            <TextView
-                android:id="@+id/nom_profil"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/relLayout1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Merveil Nicador DILON"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:background="@drawable/white_grey_border_bottom"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/desc_profil"
-                android:layout_width="wrap_content"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image_profil"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="15dp"
+                    android:src="@drawable/test_pic_merveil" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/image_profil"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/nom_profil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Merveil Nicador DILON"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/desc_profil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="I like turtles."
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relLayout2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="I like turtles."
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-        </LinearLayout>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/relLayout1">
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/desc_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/lorem_low"
+                    android:textSize="11sp" />
 
-    <RelativeLayout
-        android:id="@+id/relLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relLayout1">
+                <ImageView
+                    android:id="@+id/img_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp"
+                    android:layout_below="@id/desc_post"
+                    android:layout_centerInParent="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/starcitizen_placeholder" />
+            </RelativeLayout>
 
-        <TextView
-            android:id="@+id/desc_post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/lorem_low"
-            android:textSize="11sp" />
+            <LinearLayout
+                android:id="@+id/linLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/relLayout2">
 
-        <ImageView
-            android:id="@+id/img_post"
-            android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:layout_below="@id/desc_post"
-            android:scaleType="centerCrop"
-            android:src="@drawable/starcitizen_placeholder" />
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/likes_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="14 J'aime"
+                    android:textColor="@color/black"
+                    android:textSize="10sp" />
 
-    <LinearLayout
-        android:id="@+id/linLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relLayout2">
+                <TextView
+                    android:id="@+id/comments_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="11 commentaires"
+                    android:textColor="@color/link_blue"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
 
-        <TextView
-            android:id="@+id/likes_post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:text="14 J'aime"
-            android:textColor="@color/black"
-            android:textSize="10sp" />
-
-        <TextView
-            android:id="@+id/comments_post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="11 commentaires"
-            android:textColor="@color/link_blue"
-            android:textSize="10sp" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linLayout1" />
 
 </android.support.constraint.ConstraintLayout>
